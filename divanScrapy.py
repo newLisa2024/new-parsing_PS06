@@ -15,12 +15,24 @@ print(f"Найдено {len(titles)} товаров")  # Отладочное с
 parsed_data = []
 for title in titles:
     try:
-        name = title.find('span', attrs={'data-ui-name': 'product_name'}).text.strip()
-        price = title.find('span', attrs={'data-ui-name': 'product_price'}).text.strip()
-        link = title.find('a', attrs={'data-ui-name': 'product_card'})['href']
+        name_element = title.find('span', attrs={'data-ui-name': 'product_name'})
+        price_element = title.find('span', attrs={'data-ui-name': 'product_price'})
+        link_element = title.find('a', attrs={'data-ui-name': 'product_card'})
 
-        print(f"Название: {name}, Цена: {price}, Ссылка: {link}")  # Отладочное сообщение
-        parsed_data.append([name, price, link])
+        # Отладочные сообщения для проверки наличия элементов
+        print(f"Элемент name_element: {name_element}")
+        print(f"Элемент price_element: {price_element}")
+        print(f"Элемент link_element: {link_element}")
+
+        if name_element and price_element and link_element:
+            name = name_element.text.strip()
+            price = price_element.text.strip()
+            link = "https://www.divan.ru" + link_element['href']
+
+            print(f"Название: {name}, Цена: {price}, Ссылка: {link}")  # Отладочное сообщение
+            parsed_data.append([name, price, link])
+        else:
+            print("Не удалось найти один из элементов: название, цена или ссылка")
     except Exception as e:
         print(f"Произошла ошибка при парсинге: {e}")
         continue
@@ -51,4 +63,6 @@ except FileNotFoundError:
     print(f"Файл {csv_filename} не найден.")
 except Exception as e:
     print(f"Произошла ошибка при чтении файла: {e}")
+
+
 
